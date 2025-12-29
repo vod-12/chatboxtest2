@@ -98,17 +98,63 @@ function addMessage(text, sender) {
     const contentDiv = document.createElement('div');
     contentDiv.className = 'message-content';
     
-    const p = document.createElement('p');
-    p.textContent = text;
+    // Parse and format the text with code blocks
+    const formattedContent = formatMessageWithCode(text);
+    contentDiv.innerHTML = formattedContent;
     
-    contentDiv.appendChild(p);
     messageDiv.appendChild(contentDiv);
     messagesContainer.appendChild(messageDiv);
+    
+    // Add copy buttons to all code blocks
+    const codeBlocks = contentDiv.querySelectorAll('pre code');
+    codeBlocks.forEach(block => {
+        addCopyButton(block.parentElement);
+    });
     
     // Scroll to bottom
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
     
     return messageDiv;
+}
+
+function formatMessageWithCode(text) {
+    // Replace code blocks with proper HTML
+    text = text.replace(/```(\w+)?\n([\s\S]*?)```/g, (match, language, code) => {
+        const lang = language || 'text';
+        const escapedCode = escapeHtml(code.trim());
+        return `<pre><code class="language-${lang}">${escapedCode}</code></pre>`;
+    });
+    
+    // Replace inline code
+    text = text.replace(/`([^`]+)`/g, '<code class="inline-code">$1</code>');
+    
+    // Replace line breaks with <br>
+    text = text.replace(/\n/g, '<br>');
+    
+    return text;
+}
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+function addCopyButton(preElement) {
+    const button = document.createElement('button');
+    button.className = 'copy-btn';
+    button.innerHTML = '📋 Copy';
+    button.onclick = () => {
+        const code = preElement.querySelector('code').textContent;
+        navigator.clipboard.writeText(code).then(() => {
+            button.innerHTML = '✅ Copied!';
+            setTimeout(() => {
+                button.innerHTML = '📋 Copy';
+            }, 2000);
+        });
+    };
+    preElement.style.position = 'relative';
+    preElement.appendChild(button);
 }
 
 function addTypingIndicator() {
