@@ -65,21 +65,19 @@ body {
     max-width: 80%;
     padding: 12px 16px;
     border-radius: 12px;
-    line-height: 1.5;
+    line-height: 1.6;
 }
 
 .message.user .message-content {
     background-color: #2563eb;
     color: white;
+    white-space: pre-wrap;
+    word-wrap: break-word;
 }
 
 .message.assistant .message-content {
     background-color: #f3f4f6;
     color: #1f2937;
-}
-
-.message.assistant .message-content p {
-    margin: 0;
 }
 
 .input-container {
@@ -185,36 +183,30 @@ body {
 pre {
     background-color: #1e1e1e;
     border-radius: 8px;
-    padding: 16px;
+    padding: 16px 16px 16px 16px;
     overflow-x: auto;
-    margin: 12px 0;
+    margin: 8px 0;
     position: relative;
+    padding-top: 40px;
 }
 
 pre code {
     color: #d4d4d4;
-    font-family: 'Courier New', Consolas, monospace;
-    font-size: 14px;
-    line-height: 1.5;
+    font-family: 'Courier New', Consolas, Monaco, monospace;
+    font-size: 13px;
+    line-height: 1.6;
     display: block;
+    white-space: pre;
 }
 
 .inline-code {
-    background-color: #f3f4f6;
-    color: #e01e5a;
+    background-color: #e5e7eb;
+    color: #d63384;
     padding: 2px 6px;
     border-radius: 4px;
-    font-family: 'Courier New', Consolas, monospace;
+    font-family: 'Courier New', Consolas, Monaco, monospace;
     font-size: 13px;
-}
-
-.message.assistant .inline-code {
-    background-color: #e5e7eb;
-}
-
-.message.user .inline-code {
-    background-color: rgba(255, 255, 255, 0.2);
-    color: #fff;
+    white-space: nowrap;
 }
 
 .copy-btn {
@@ -226,9 +218,10 @@ pre code {
     border: none;
     border-radius: 6px;
     padding: 6px 12px;
-    font-size: 12px;
+    font-size: 11px;
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: all 0.2s;
+    font-family: system-ui, -apple-system, sans-serif;
 }
 
 .copy-btn:hover {
@@ -236,12 +229,25 @@ pre code {
 }
 
 .copy-btn:active {
-    background-color: #1f2937;
+    transform: scale(0.95);
 }
 
-/* Make sure text content preserves formatting */
-.message-content p {
-    margin: 0;
-    white-space: pre-wrap;
-    word-wrap: break-word;
+/* Lists */
+.message-content ul,
+.message-content ol {
+    margin: 8px 0;
+    padding-left: 24px;
+}
+
+.message-content li {
+    margin: 4px 0;
+}
+
+/* Bold and italic */
+.message-content strong {
+    font-weight: 600;
+}
+
+.message-content em {
+    font-style: italic;
 }
