@@ -24,15 +24,13 @@ module.exports = async (req, res) => {
 
     // Check if API key exists
     if (!API_KEY) {
-        console.error('❌ API_KEY environment variable is not set');
+        console.error('API_KEY environment variable is not set');
         res.status(500).json({ 
             error: 'Server configuration error',
             details: 'API_KEY not configured in Vercel environment variables'
         });
         return;
     }
-
-    console.log('✅ API_KEY found:', API_KEY.substring(0, 10) + '...');
 
     // Get prompt from request
     const { prompt } = req.body;
@@ -42,18 +40,14 @@ module.exports = async (req, res) => {
         return;
     }
 
-    console.log('📩 Received prompt:', prompt.substring(0, 50) + '...');
-
     try {
-        console.log('🚀 Making request to Arioron API...');
+        console.log('Making request to Arioron API...');
         
         const apiResponse = await axios.post(
             API_URL,
             {
                 model: 'perceptix-vex-amber',
-                prompt:`You are Vex, an AI study assistant designed to help students and coders learn effectively: """${prompt}"""
-
-Your response:`,
+                prompt: `You are Vex, an AI study assistant designed to help students and coders learn effectively : """${prompt}""" Your response:`,
                 safety_harassment: false,
                 safety_sexual: false,
                 safety_hate: false,
@@ -70,15 +64,13 @@ Your response:`,
             }
         );
 
-        console.log('✅ API Response status:', apiResponse.status);
-        console.log('📦 API Response data:', JSON.stringify(apiResponse.data));
+        console.log('API Response received');
 
         // Arioron returns the response in the "response" field
         if (apiResponse.data && apiResponse.data.response) {
-            console.log('✅ Sending response back to client');
             res.status(200).json({ response: apiResponse.data.response });
         } else {
-            console.error('❌ Unexpected response format:', apiResponse.data);
+            console.error('Unexpected response format:', apiResponse.data);
             res.status(500).json({ 
                 error: 'Unexpected response format',
                 details: 'API returned data but not in expected format'
@@ -86,14 +78,11 @@ Your response:`,
         }
 
     } catch (error) {
-        console.error('❌ Error occurred:');
-        console.error('Error type:', error.constructor.name);
-        console.error('Error message:', error.message);
+        console.error('Error occurred:', error.message);
         
         if (error.response) {
             console.error('Response status:', error.response.status);
-            console.error('Response data:', JSON.stringify(error.response.data));
-            console.error('Response headers:', JSON.stringify(error.response.headers));
+            console.error('Response data:', error.response.data);
             
             res.status(error.response.status).json({ 
                 error: 'Arioron API error',
@@ -101,7 +90,6 @@ Your response:`,
             });
         } else if (error.request) {
             console.error('No response received');
-            console.error('Request:', error.request);
             
             res.status(503).json({ 
                 error: 'Cannot reach Arioron API',
