@@ -49,9 +49,21 @@ async function sendMessage() {
         });
         
         console.log('Response status:', response.status);
+        console.log('Response content-type:', response.headers.get('content-type'));
         
-        const data = await response.json();
-        console.log('Response data:', data);
+        // Check if response is JSON
+        const contentType = response.headers.get('content-type');
+        let data;
+        
+        if (contentType && contentType.includes('application/json')) {
+            data = await response.json();
+            console.log('Response data:', data);
+        } else {
+            // If not JSON, read as text
+            const text = await response.text();
+            console.log('Response text:', text);
+            data = { error: 'Server error', details: text };
+        }
         
         // Remove typing indicator
         typingIndicator.remove();
