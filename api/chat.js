@@ -51,7 +51,7 @@ module.exports = async (req, res) => {
             API_URL,
             {
                 model: 'perceptix-vex-amber',
-                prompt: `prompt: `You are Vex, an AI study assistant designed to help students and coders learn effectively: """${prompt}"""
+                prompt:`You are Vex, an AI study assistant designed to help students and coders learn effectively: """${prompt}"""
 
 Your response:`,
                 safety_harassment: false,
