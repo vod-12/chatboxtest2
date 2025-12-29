@@ -1,6 +1,6 @@
 const axios = require('axios');
 
-const API_KEY = process.env.API_KEY || 'ar_89LUyHegAnrFlRQkNbcC_P4KqE_l23tHjNHiBATm';
+const API_KEY = process.env.ar_PEgVE04iPwzidVaGZZyZeWBIuPVtVi128a8UUV_2;
 const API_URL = 'https://api.arioron.com/api/v1/ai/generate';
 
 module.exports = async (req, res) => {
