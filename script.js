@@ -37,6 +37,8 @@ async function sendMessage() {
     const typingIndicator = addTypingIndicator();
     
     try {
+        console.log('Sending message:', message);
+        
         // Send request to server
         const response = await fetch('/api/chat', {
             method: 'POST',
@@ -46,22 +48,31 @@ async function sendMessage() {
             body: JSON.stringify({ prompt: message })
         });
         
-        if (!response.ok) {
-            throw new Error('Failed to get response');
-        }
+        console.log('Response status:', response.status);
         
         const data = await response.json();
+        console.log('Response data:', data);
         
         // Remove typing indicator
         typingIndicator.remove();
         
+        if (!response.ok) {
+            // Show the actual error from the API
+            addMessage(`Error: ${data.error || 'Unknown error'}${data.details ? '\n\n' + data.details : ''}`, 'assistant');
+            return;
+        }
+        
         // Add AI response
-        addMessage(data.response, 'assistant');
+        if (data.response) {
+            addMessage(data.response, 'assistant');
+        } else {
+            addMessage('Error: No response received from AI', 'assistant');
+        }
         
     } catch (error) {
-        console.error('Error:', error);
+        console.error('Error details:', error);
         typingIndicator.remove();
-        addMessage('Sorry, I encountered an error. Please try again.', 'assistant');
+        addMessage(`Sorry, I encountered an error: ${error.message}`, 'assistant');
     } finally {
         sendBtn.disabled = false;
         userInput.focus();
