@@ -1,6 +1,6 @@
 # AI Chatbox
 
-A clean, Claude-style chatbox interface powered by the Arioron AI API.
+A clean, minimal chatbox interface powered by the Arioron AI API.
 
 ## Setup Instructions
 
